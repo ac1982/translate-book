@@ -1,12 +1,12 @@
 ---
 name: translate-book
-description: Translate a book or long document (epub, docx, pdf, markdown) to another language using Claude's intelligence. Interactive — asks user for file, language, and style.
+description: Translate a book or long document (epub, docx, pdf, markdown) to another language using the agent's built-in intelligence. Interactive — asks user for file, language, and style.
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent
 ---
 
 # Translate Book
 
-Use Claude's built-in intelligence to translate an entire book or long document. No external translation API — you ARE the translator. Supports epub, docx, pdf (text-based), and markdown.
+Use the agent's built-in intelligence to translate an entire book or long document. No external translation API — you ARE the translator. Supports epub, docx, pdf (text-based), and markdown.
 
 ## Interaction Language
 

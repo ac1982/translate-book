@@ -1,6 +1,6 @@
 # translate-book
 
-A Claude Code skill that translates entire books and long documents using Claude's built-in intelligence. No external translation API needed — Claude itself is the translator.
+An agent skill that translates entire books and long documents using the agent's built-in intelligence. No external translation API needed — the agent itself is the translator. Works with Claude Code, Codex, Gemini CLI, GitHub Copilot, and other AI coding agents.
 
 ## Supported Formats
 
@@ -28,7 +28,7 @@ In Claude Code, run:
 The skill interactively asks you:
 
 1. **Which file?** — scans your current directory for supported files
-2. **Target language?** — any language Claude speaks
+2. **Target language?** — any language the agent speaks
 3. **Translation style?** — e.g. literary (信达雅), conversational, academic, literal, children's book…
 
 Then it translates the entire book using parallel agents for speed, preserving all formatting, images, fonts, and structure.
@@ -62,9 +62,9 @@ Translating... 6 parallel agents working on 122 chapters
 
 ## Requirements
 
-- [Claude Code](https://claude.ai/claude-code) with Opus model recommended for best translation quality
+- Any AI coding agent that supports skills (Claude Code, Codex, Gemini CLI, GitHub Copilot, etc.)
 - `uv` (Python package manager) — used as runtime for file processing
-- No API keys or external services needed
+- No external API keys or translation services needed
 
 ## License
 
