@@ -6,7 +6,7 @@ allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent
 
 # Translate Book
 
-Use the agent's built-in intelligence to translate an entire book or long document. No external translation API — you ARE the translator. Supports epub, docx, pdf (text-based), and markdown.
+Use the agent's built-in intelligence (like Claude Code, OpenAI Codex, Gemini CLI, GitHub Copilot) to translate an entire book or long document. No external translation API — you ARE the translator. Supports epub, docx, pdf (text-based), and markdown.
 
 ## Interaction Language
 
