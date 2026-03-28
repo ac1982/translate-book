@@ -29,6 +29,7 @@ Ask the user 3 questions before starting (glob for supported files in cwd to off
 - Translate `nav.xhtml` TOC entries and `toc.ncx` `<text>` elements
 - Update `content.opf`: `dc:language`, `dc:title`, `dc:description`
 - Repackage: `mimetype` first entry, uncompressed (`ZIP_STORED`); all others `ZIP_DEFLATED`
+- Files to preserve unchanged: `mimetype`, `META-INF/container.xml`, `*.css`, `*.ttf`, `*.otf`, `*.woff`, `*.jpg`, `*.png`, `*.svg`, ...
 - Output: `<name>-<lang>.epub`
 
 ### DOCX
@@ -36,6 +37,7 @@ Ask the user 3 questions before starting (glob for supported files in cwd to off
 - Translate `word/document.xml` and any `word/header*.xml`, `word/footer*.xml` — text lives in `<w:t>` elements
 - Preserve all XML structure, styles, formatting runs (`<w:r>`, `<w:rPr>`)
 - Update `docProps/core.xml` language and title if present
+- Files to preserve unchanged: `word/styles.xml`, `word/theme/*.xml`, `word/media/*`, `[Content_Types].xml`, `_rels/*`, ...
 - Repackage as ZIP, output: `<name>-<lang>.docx`
 
 ### PDF (text-based)
