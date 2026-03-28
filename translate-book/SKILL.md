@@ -20,61 +20,35 @@ Ask the user 3 questions before starting (glob for supported files in cwd to off
 2. Target language?
 3. Translation style? (e.g. 信达雅、口语化、学术、直译、儿童读物…)
 
-## Format-Specific Handling
+## Workflow
 
-### EPUB
-- Extract via Python `zipfile` to `work/`
-- Analyze spine order from `content.opf`, count text volume per XHTML file
-- Translate XHTML content files in parallel batches (preserve all markup)
-- Translate `nav.xhtml` TOC entries and `toc.ncx` `<text>` elements
-- Update `content.opf`: `dc:language`, `dc:title`, `dc:description`
-- Repackage: `mimetype` first entry, uncompressed (`ZIP_STORED`); all others `ZIP_DEFLATED`
-- Files to preserve unchanged: `mimetype`, `META-INF/container.xml`, `*.css`, `*.ttf`, `*.otf`, `*.woff`, `*.jpg`, `*.png`, `*.svg`, ...
-- Output: `<name>-<lang>.epub`
+### 1. Unpack
+Most book formats are ZIP archives internally (epub, docx). Use `uv` + Python `zipfile` to extract to `work/`. For markdown, read directly. For PDF, extract text via PyMuPDF (warn and stop if scanned/image-only).
 
-### DOCX
-- Extract via Python `zipfile` to `work/` (docx is also a ZIP archive)
-- Translate `word/document.xml` and any `word/header*.xml`, `word/footer*.xml` — text lives in `<w:t>` elements
-- Preserve all XML structure, styles, formatting runs (`<w:r>`, `<w:rPr>`)
-- Update `docProps/core.xml` language and title if present
-- Files to preserve unchanged: `word/styles.xml`, `word/theme/*.xml`, `word/media/*`, `[Content_Types].xml`, `_rels/*`, ...
-- Repackage as ZIP, output: `<name>-<lang>.docx`
+### 2. Translate content — only text, preserve everything else
+Analyze structure, split content files into **~6 balanced batches**, launch **parallel background agents**.
 
-### PDF (text-based)
-- Extract text via `uv add pymupdf` → `fitz` (PyMuPDF), check if text-extractable
-- If scanned/image PDF: warn user and stop
-- Export to markdown, translate, then rebuild as a new markdown or docx (PDF rebuild is lossy — inform user of format choice)
-- Output: `<name>-<lang>.md` or `<name>-<lang>.docx`
+Each agent only translates human-readable text. Everything else stays untouched:
 
-### Markdown
-- Read the file directly, split into sections by headings
-- Translate text, preserve all markdown syntax (links, images, code blocks, front matter)
-- Output: `<name>-<lang>.md`
+| Translate | Preserve as-is |
+|-----------|---------------|
+| Paragraphs, headings, TOC entries | Markup structure (HTML, XML, markdown syntax) |
+| Chapter titles, section names | Tags, attributes, CSS classes, IDs, links |
+| Body text, dialogue, quotes | Images (`*.jpg`, `*.png`, `*.svg`, ...) |
+| Metadata: book title, description | Fonts (`*.ttf`, `*.otf`, `*.woff`, ...) |
+| | Stylesheets (`*.css`, `styles.xml`, ...) |
+| | Config files (`mimetype`, `container.xml`, `[Content_Types].xml`, `_rels/*`, ...) |
+| | Footnote citations, URLs, ISBN, copyright notices |
 
-## Workflow (all formats)
+Format-specific notes:
+- **EPUB**: content is in `OEBPS/*.xhtml`; also translate `nav.xhtml` TOC and `toc.ncx`; update `content.opf` language code
+- **DOCX**: text lives in `<w:t>` elements within `word/document.xml`, `word/header*.xml`, `word/footer*.xml`; update `docProps/core.xml`
+- **PDF**: lossy — export to markdown first, translate, output as `.md` or `.docx` (inform user)
+- **Markdown**: preserve all syntax (links, images, code blocks, front matter)
 
-### 1. Setup & Analysis
-- Use `uv` as Python runtime, install deps as needed
-- Extract/read the source, analyze structure and text volume
-- Decide batch split based on volume
+### 3. Repack
+Rebuild in the original format. Output as `<name>-<lang>.<ext>`.
+- EPUB special rule: `mimetype` must be first ZIP entry, uncompressed (`ZIP_STORED`)
 
-### 2. Translate content
-- Split into **~6 balanced batches**, launch **parallel background agents**
-- Each agent: read → translate (preserving structure/markup) → write back
-- Pass user's style preference and target language to each agent
-- Keep these in original language (do NOT translate):
-  - Footnote/endnote citations: `<aside>Isaacson, Walter. "Elon Musk." Simon & Schuster, 2023.</aside>`
-  - URLs: `https://twitter.com/elonmusk/status/...`
-  - Source attributions: `— Elon Musk, Twitter, March 2024`
-  - Code snippets, formulas, legal disclaimers (ISBN, copyright notices)
-
-### 3. Metadata & navigation
-- Update language codes, titles, TOC entries as appropriate for the format
-
-### 4. Package & output
-- Rebuild in the original format (or best available — see PDF note)
-- Preserve all images, fonts, styles unchanged
-
-### 5. Validate & cleanup
-- Structure check, spot-check 2-3 translated sections for quality
-- Clean up temp files
+### 4. Validate & cleanup
+Structure check, spot-check 2-3 chapters, clean up `work/`
