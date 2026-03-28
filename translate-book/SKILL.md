@@ -59,6 +59,9 @@ Ask the user 3 questions before starting (glob for supported files in cwd to off
 ### 2. Translate content
 - Split into **~6 balanced batches**, launch **parallel background agents**
 - Each agent: read → translate (preserving structure/markup) → write back
+  - e.g. `<h1 class="title">Be Useful</h1>` → `<h1 class="title">做一个有用的人</h1>`
+  - e.g. `<p>Work like hell.</p>` → `<p>拼命工作。</p>`
+  - Only translate text nodes; never touch tags, attributes, links, or IDs
 - Pass user's style preference and target language to each agent
 - Bibliographic citations/references stay in original language
 
