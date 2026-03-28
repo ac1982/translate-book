@@ -59,11 +59,12 @@ Ask the user 3 questions before starting (glob for supported files in cwd to off
 ### 2. Translate content
 - Split into **~6 balanced batches**, launch **parallel background agents**
 - Each agent: read → translate (preserving structure/markup) → write back
-  - e.g. `<h1 class="title">Be Useful</h1>` → `<h1 class="title">做一个有用的人</h1>`
-  - e.g. `<p>Work like hell.</p>` → `<p>拼命工作。</p>`
-  - Only translate text nodes; never touch tags, attributes, links, or IDs
 - Pass user's style preference and target language to each agent
-- Bibliographic citations/references stay in original language
+- Keep these in original language (do NOT translate):
+  - Footnote/endnote citations: `<aside>Isaacson, Walter. "Elon Musk." Simon & Schuster, 2023.</aside>`
+  - URLs: `https://twitter.com/elonmusk/status/...`
+  - Source attributions: `— Elon Musk, Twitter, March 2024`
+  - Code snippets, formulas, legal disclaimers (ISBN, copyright notices)
 
 ### 3. Metadata & navigation
 - Update language codes, titles, TOC entries as appropriate for the format
