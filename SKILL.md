@@ -46,9 +46,19 @@ Format-specific notes:
 - **PDF**: lossy — export to markdown first, translate, output as `.md` or `.docx` (inform user)
 - **Markdown**: preserve all syntax (links, images, code blocks, front matter)
 
-### 3. Repack
+### 3. Editorial consistency pass
+Parallel agents produce inconsistent choices across batches — character names get different transliterations, recurring terms drift, styles diverge. Long-context models (≥200K) can read the whole translated book at once and fix this; do NOT skip.
+
+Use the main agent (not a subagent — this needs the full book in one context):
+- Collect all translated content files, grep for every proper noun (人名、地名、品牌、作品名) across the book, and build a canonical glossary. Each name picks ONE Chinese form.
+- Fix inconsistencies with `Edit` / `replace_all` — e.g. Xavier 沙维尔→泽维尔, Josie 乔西→乔茜, Katie Kitamura 片山凯蒂→北村凯蒂.
+- Cross-check TOC/nav entries match each chapter's `<h1>` verbatim.
+- Spot-check register (narrative vs dialogue) and tone for the chosen style (e.g. 信达雅 expects literary polish in prose, colloquial ease in dialogue).
+- Re-validate XHTML well-formedness after edits.
+
+### 4. Repack
 Rebuild in the original format. Output as `<name>-<lang>.<ext>`.
 - EPUB special rule: `mimetype` must be first ZIP entry, uncompressed (`ZIP_STORED`)
 
-### 4. Validate & cleanup
+### 5. Validate & cleanup
 Structure check, spot-check 2-3 chapters, clean up `work/`
