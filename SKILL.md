@@ -20,6 +20,27 @@ Ask the user 3 questions before starting (glob for supported files in cwd to off
 2. Target language?
 3. Translation style? (e.g. 信达雅、口语化、学术、直译、儿童读物…)
 
+## Python Runtime
+
+Use `uv` for Python environment management. If `.venv-translate/bin/python`
+exists in the project root, run Python processing commands with that interpreter
+directly:
+
+```bash
+.venv-translate/bin/python <script-or-inline-python>
+```
+
+When dependencies need to be installed or refreshed, manage the same environment
+with uv:
+
+```bash
+uv pip install --python .venv-translate/bin/python <packages>
+```
+
+If `.venv-translate/` is missing, recreate it with `uv venv .venv-translate`
+before installing dependencies. Do not treat `.venv-translate/` as source data;
+it is a local, rebuildable runtime environment.
+
 ## Workflow
 
 ### 1. Unpack
