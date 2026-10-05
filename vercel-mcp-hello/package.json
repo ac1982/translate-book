@@ -1,0 +1,19 @@
+{
+  "name": "vercel-mcp-hello",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "dependencies": {
+    "mcp-handler": "latest",
+    "next": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  }
+}
